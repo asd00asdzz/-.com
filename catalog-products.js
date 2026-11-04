@@ -23,7 +23,7 @@ window.catalogVideoUrl = (url) => {
     || parsedUrl.searchParams.get("id");
   if (!fileId) return url;
 
-  return `https://drive.google.com/file/d/${encodeURIComponent(fileId)}/preview`;
+  return `https://drive.google.com/uc?export=download&id=${encodeURIComponent(fileId)}`;
 };
 
 let forestCaptureInProgress = false;
@@ -56,43 +56,6 @@ window.showCatalogImage = (url, alt) => {
   image.alt = alt;
   dialog.showModal();
 };
-
-window.showContactOptions = (product) => {
-  const dialog = document.querySelector("#contact-options-dialog");
-  if (!(dialog instanceof HTMLDialogElement)) {
-    throw new Error("ไม่พบหน้าต่างช่องทางติดต่อ");
-  }
-
-  const productMessage = dialog.querySelector(".contact-dialog-product");
-  const lineLink = dialog.querySelector("[data-line-contact]");
-  if (productMessage && lineLink) {
-    if (product) {
-      productMessage.textContent = `สอบถามสินค้า: ${product.title}`;
-      const message = `สนใจสินค้า: ${product.title}\nรูปสินค้า: ${product.image}`;
-      lineLink.href = `https://line.me/R/oaMessage/%40634lfegy/?${encodeURIComponent(message)}`;
-    } else {
-      productMessage.textContent = "เลือกช่องทางที่สะดวกเพื่อติดต่อร้าน";
-      lineLink.href = "https://line.me/R/ti/p/%40634lfegy";
-    }
-  }
-
-  if (!dialog.dataset.contactInitialized) {
-    dialog.querySelector("[data-contact-close]")?.addEventListener("click", () => dialog.close());
-    dialog.addEventListener("click", (event) => {
-      if (event.target === dialog) dialog.close();
-    });
-    dialog.dataset.contactInitialized = "true";
-  }
-
-  if (!dialog.open) dialog.showModal();
-};
-
-document.addEventListener("click", (event) => {
-  const trigger = event.target.closest("[data-contact-options]");
-  if (!trigger) return;
-  event.preventDefault();
-  window.showContactOptions();
-});
 
 window.carryProductToContact = async (card, contact) => {
   if (forestCaptureInProgress) return;
@@ -241,25 +204,24 @@ window.catalogProducts = [
     description: "ตรวจสอบชนิดและความเข้ากันได้กับหน้าไม้แต่ละรุ่น"
   },
   {
-    category: "rat-spearguns",
-    image: "Gemini_Generated_Image_nm7gfunm7gfunm7g.jpg",
-    alt: "ภาพหน้าไม้ยิงหนู รุ่นยอดนิยม",
-    title: "หน้าไม้ยิงหนู รุ่นยอดนิยม",
-    description: "สอบถามรายละเอียด รุ่นสินค้า และสินค้าที่มีในสต็อกกับทางร้าน",
-    tag: "หน้าไม้ยิงหนู"
+    category: "accessories",
+    image: "Gemini_Generated_Image_vr6nhqvr6nhqvr6n.jpg",
+    alt: "ภาพตัวอย่างอุปกรณ์สำหรับลงน้ำ",
+    title: "หน้ากากและอุปกรณ์ดำน้ำ",
+    description: "เลือกอุปกรณ์ให้พอดีและเหมาะกับการใช้งานทางน้ำ"
   },
   {
     category: "accessories",
-    image: "Gemini_Generated_Image_x7ye2kx7ye2kx7ye.jpg",
-    alt: "ภาพอุปกรณ์เสริมหน้าไม้ยิงหนูและชุดลูกดอก",
-    title: "ชุดลูกดอกและอุปกรณ์หน้าไม้ยิงหนู",
-    description: "ภาพแสดงลูกดอกและอุปกรณ์ที่ใช้ร่วมกับหน้าไม้ยิงหนู สอบถามรายละเอียดกับทางร้าน"
+    image: "speargun-wood-front.jpg",
+    alt: "หน้าไม้ยิงปลาและอุปกรณ์เสริม",
+    title: "กระเป๋าและอุปกรณ์จัดเก็บ",
+    description: "สอบถามรูปแบบและขนาดอุปกรณ์เสริมที่มีในร้าน"
   },
   {
     category: "accessories",
-    image: "Gemini_Generated_Image_q0nfwaq0nfwaq0nf.jpg",
-    alt: "ภาพไกหน้าไม้ยิงหนูและอุปกรณ์สแตนเลส",
-    title: "ไกและอะไหล่หน้าไม้ยิงหนู",
-    description: "ภาพตัวอย่างชุดไกและอะไหล่ สอบถามรุ่นที่ใช้ร่วมกันได้กับทางร้าน"
+    image: "speargun-wood-side.jpg",
+    alt: "ภาพอุปกรณ์หน้าไม้ยิงปลา",
+    title: "อุปกรณ์ดูแลหน้าไม้",
+    description: "สอบถามวิธีดูแลและสินค้าเสริมที่เหมาะกับอุปกรณ์"
   }
 ];

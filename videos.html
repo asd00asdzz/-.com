@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#171717">
+  <meta name="description" content="เลือกชมคลิปล่าสุดจากบัญชี TikTok ของแอดมินธนากรฟิชชิ่ง">
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <title>ดูคลิป TikTok | ธนากรฟิชชิ่ง</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Leelawadee UI", "Noto Sans Thai", Tahoma, sans-serif;
+      color: #1b1b1b;
+      background: #f7f7f7;
+      --red: #d51f35;
+      --line: #e4e4e4;
+      --muted: #666;
+    }
+    * { box-sizing: border-box; }
+    body { min-width: 280px; margin: 0; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .topbar { padding: 9px 14px; color: #eee; background: #171717; text-align: center; font-size: 13px; }
+    .topbar strong { color: #ff5264; }
+    .container { width: min(940px, calc(100% - 32px)); margin-inline: auto; }
+    .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--line); background: #fff; }
+    header { background: #fff; border-bottom: 1px solid var(--line); }
+    .brand { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 10px; font-weight: 800; }
+    .brand img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; }
+    .brand small { display: block; color: var(--muted); font-size: 10px; font-weight: 500; }
+    .nav-links { display: flex; align-items: center; gap: 20px; color: #555; font-size: 14px; white-space: nowrap; }
+    .nav-links a[aria-current="page"], .nav-links a:hover { color: var(--red); }
+    main { padding: 32px 0 56px; }
+    .intro { padding: clamp(20px, 5vw, 36px); border-radius: 22px; color: #fff; background: linear-gradient(130deg, #191919, #3a151b); }
+    .kicker { color: #ff6977; font-size: 12px; font-weight: 800; letter-spacing: .5px; }
+    h1 { margin: 8px 0; font-size: clamp(25px, 6vw, 36px); }
+    .intro p { max-width: 670px; margin: 0; color: #eee; font-size: 14px; line-height: 1.75; }
+    .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 20px 0 14px; }
+    .controls button { min-height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: #333; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .controls button:hover, .controls button[aria-pressed="true"] { border-color: var(--red); color: #fff; background: var(--red); }
+    .controls button.random { border-color: #222; color: #fff; background: #222; }
+    .controls button.random:hover { background: #444; }
+    .selected-name { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+    .selected-name strong { color: #222; }
+    .selected-link { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: -4px 0 12px; font-size: 13px; }
+    .selected-link a { color: var(--red); font-weight: 800; text-decoration: underline; }
+    .selected-link button { min-height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+    .player-status { min-height: 20px; margin: 0 0 8px; color: var(--muted); font-size: 12px; }
+    .player-shell { min-height: 240px; display: flex; justify-content: center; padding: 12px; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: #111; }
+    .player-shell iframe { display: block; width: min(100%, 405px); height: min(720px, calc((100vw - 64px) * 16 / 9)); min-height: 420px; border: 0; border-radius: 10px; background: #000; }
+    .notice { margin: 14px 0 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
+    .fallback { margin: 12px 0; color: var(--muted); text-align: center; font-size: 13px; line-height: 1.7; }
+    .fallback a { color: var(--red); font-weight: 800; text-decoration: underline; }
+    footer { padding: 22px 0; border-top: 1px solid var(--line); color: var(--muted); background: #fff; font-size: 12px; }
+    @media (max-width: 640px) {
+      .container { width: calc(100% - 24px); }
+      .nav { min-height: 0; flex-wrap: wrap; gap: 10px; padding: 11px 0; }
+      .brand img { width: 40px; height: 40px; }
+      .nav-links { width: 100%; justify-content: space-between; gap: 10px; overflow-x: auto; padding: 2px 0; font-size: 13px; }
+      main { padding-top: 18px; }
+      .player-shell { padding: 6px; }
+      .controls { gap: 7px; }
+      .controls button { padding: 0 11px; font-size: 12px; }
+    }
+    @media (max-width: 340px) {
+      .player-shell { padding-inline: 4px; }
+      .player-shell iframe { height: min(680px, calc((100vw - 40px) * 16 / 9)); min-height: 400px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">ธนากรฟิชชิ่ง <strong>คลิปจากแอดมิน</strong></div>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="กลับหน้าหลักธนากรฟิชชิ่ง">
+        <img src="brand-logo.png" alt="">
+        <span>ธนากรฟิชชิ่ง<small>RIM BUENG FISHING</small></span>
+      </a>
+      <nav class="nav-links" aria-label="เมนูหลัก">
+        <a href="index.html">หน้าหลัก</a>
+        <a href="15.html">สินค้าทั้งหมด</a>
+        <a href="videos.html" aria-current="page">ดูคลิป</a>
+        <a href="index.html#contact">ติดต่อร้าน</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <section class="intro">
+      <span class="kicker">TIKTOK จากแอดมินร้าน</span>
+      <h1>เลือกชมคลิปสินค้า</h1>
+      <p>ดูคลิปจากหลายช่องแบบสุ่ม กด “สุ่มคลิป + เล่นเสียง” เพื่อเปลี่ยนไปคลิปถัดไป</p>
+    </section>
+    <div class="controls" id="creator-controls" aria-label="กรองคลิปตามช่อง"></div>
+    <p class="selected-name" id="selected-name" aria-live="polite"></p>
+    <div class="controls" id="video-controls" aria-label="เลือกคลิป"></div>
+    <p class="selected-link" id="selected-link"></p>
+    <p class="player-status" id="player-status" aria-live="polite"></p>
+    <section class="player-shell" id="player-shell" aria-label="คลิป TikTok จากบัญชีที่เลือก">
+      <p class="fallback">เลือกบัญชีเพื่อดูคลิปจากช่องแอดมิน</p>
+    </section>
+    <p class="notice">ปุ่ม “เล่นพร้อมเสียง” จะสั่งเปิดเสียงและเล่น หากเบราว์เซอร์ไม่อนุญาต ให้แตะปุ่มเสียงในตัวเล่นเอง รายการนี้รวมคลิปสาธารณะที่ค้นพบและยืนยัน URL ได้ ไม่ใช่คลิปทั้งหมดในบัญชี</p>
+  </main>
+  <footer><div class="container">© 2026 ธนากรฟิชชิ่ง · คลิปและสิทธิ์ในวิดีโอเป็นของผู้สร้างบน TikTok</div></footer>
+  <script>
+    const creators = [
+      { username: "tk.fishing2", admin: "โม", videos: [] },
+      { username: "gooddey10", admin: "โม", videos: ["7694549974218067220", "7624389165693635848"] },
+      { username: "g.bigfish", admin: "เหมย", videos: ["7702418089324875028", "7597358673798728981", "7693819205291937045", "7470121242360614151"] },
+      { username: "jguugih", admin: "เหมย", videos: ["7684214297412504852"] },
+      { username: "chiwfitchv2", admin: "เอ๊ะ", videos: ["7663142196736003336", "7624023962007162133", "7697253742625770753", "7663373743082786056"] },
+      { username: "hanakam05", admin: "เอ๊ะ", videos: ["7699327310486408455", "7689303357139242248"] },
+      { username: "tk36465", admin: "เอ๊ะ", videos: ["7702274099019615506", "7693838926007520520", "7679347586603519239"] },
+      { username: "naritsxsi29", admin: "ไข่มุก", videos: [] },
+      { username: "parkerkindly", admin: "ไข่มุก", videos: ["7693020091767639304", "7692361342128360712"] },
+      { username: "user8138179195068", admin: "นะเน็ค จอมแห้ว", videos: ["7696435207527730440", "7698655748368125190"] }
+    ];
+    const controls = document.querySelector("#creator-controls");
+    const videoControls = document.querySelector("#video-controls");
+    const selectedName = document.querySelector("#selected-name");
+    const selectedLink = document.querySelector("#selected-link");
+    const playerStatus = document.querySelector("#player-status");
+    const playerShell = document.querySelector("#player-shell");
+    const allVideos = creators.flatMap((creator) => creator.videos.map((id) => ({ id, creator })));
+    const soundButton = document.createElement("button");
+    soundButton.type = "button";
+    soundButton.textContent = "เล่นพร้อมเสียง";
+    let soundRequested = false;
+    let activeCreator = null;
+    let activeVideoId = "";
+    let activeVideoPool = allVideos;
+    let shuffledVideos = [];
+    let videoIndex = -1;
+
+    function shuffle(items) {
+      const result = [...items];
+      for (let index = result.length - 1; index > 0; index -= 1) {
+        const swapIndex = Math.floor(Math.random() * (index + 1));
+        [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+      }
+      return result;
+    }
+
+    function renderVideo(video, { autoplay = false } = {}) {
+      if (!video) return;
+      activeCreator = video.creator;
+      activeVideoId = video.id;
+      if (autoplay) soundRequested = true;
+      const count = activeVideoPool.length;
+      selectedName.replaceChildren(
+        `คลิป ${videoIndex + 1} จาก ${count} · `,
+        document.createElement("strong")
+      );
+      selectedName.querySelector("strong").textContent = `แอดมิน${video.creator.admin} (@${video.creator.username})`;
+
+      const postUrl = `https://www.tiktok.com/@${video.creator.username}/video/${video.id}`;
+      const postLink = document.createElement("a");
+      postLink.href = postUrl;
+      postLink.target = "_blank";
+      postLink.rel = "noopener noreferrer";
+      postLink.textContent = "เปิดคลิปนี้ใน TikTok";
+      selectedLink.replaceChildren(postLink);
+      playerStatus.textContent = autoplay
+        ? "กำลังเริ่มคลิปพร้อมเสียง… หากยังเงียบ ให้แตะปุ่มลำโพงในตัวคลิป"
+        : "กด “เล่นพร้อมเสียง” เพื่อเริ่ม หรือกดปุ่มเล่นและลำโพงในตัววิดีโอ";
+
+      const iframe = document.createElement("iframe");
+      const params = new URLSearchParams({
+        controls: "1",
+        description: "1",
+        music_info: "1",
+        autoplay: autoplay ? "1" : "0",
+        muted: "0",
+        force_muted: "0",
+        loop: "0",
+        rel: "0"
+      });
+      iframe.src = `https://www.tiktok.com/player/v1/${encodeURIComponent(video.id)}?${params}`;
+      iframe.title = `คลิป TikTok จากแอดมิน${video.creator.admin} (@${video.creator.username})`;
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share";
+      iframe.allowFullscreen = true;
+      iframe.loading = "eager";
+      playerShell.replaceChildren(iframe);
+    }
+
+    function sendPlayerCommand(type) {
+      const iframe = playerShell.querySelector("iframe");
+      iframe?.contentWindow?.postMessage({
+        "x-tiktok-player": true,
+        type,
+        value: null
+      }, "https://www.tiktok.com");
+    }
+
+    soundButton.addEventListener("click", () => {
+      soundRequested = true;
+      const currentVideo = shuffledVideos[videoIndex];
+      if (currentVideo) {
+        renderVideo(currentVideo, { autoplay: true });
+      } else {
+        sendPlayerCommand("unMute");
+        sendPlayerCommand("play");
+      }
+      playerStatus.textContent = "เริ่มคลิปแล้ว หากยังเงียบ ให้แตะไอคอนลำโพงในตัววิดีโอเพื่อเปิดเสียง";
+    });
+
+    window.addEventListener("message", (event) => {
+      const iframe = playerShell.querySelector("iframe");
+      if (event.origin !== "https://www.tiktok.com" || event.source !== iframe?.contentWindow) return;
+      const data = event.data;
+      if (!data || data["x-tiktok-player"] !== true) return;
+      if (data.type === "onPlayerReady" && soundRequested) {
+        sendPlayerCommand("unMute");
+        sendPlayerCommand("play");
+      } else if (data.type === "onStateChange" && Number(data.value) === 0) {
+        drawNext({ autoplay: true });
+      } else if (data.type === "onPlayerError") {
+        playerStatus.textContent = "TikTok เล่นคลิปนี้ไม่สำเร็จ ลองโหลดใหม่หรือสุ่มคลิปอื่น";
+      }
+    });
+
+    function drawNext({ autoplay = true } = {}) {
+      if (!shuffledVideos.length || videoIndex >= shuffledVideos.length - 1) {
+        const previousId = activeVideoId;
+        shuffledVideos = shuffle(activeVideoPool);
+        if (shuffledVideos.length > 1 && shuffledVideos[0].id === previousId) {
+          [shuffledVideos[0], shuffledVideos[1]] = [shuffledVideos[1], shuffledVideos[0]];
+        }
+        videoIndex = -1;
+      }
+      videoIndex += 1;
+      renderVideo(shuffledVideos[videoIndex], { autoplay });
+    }
+
+    function drawPrevious() {
+      if (videoIndex <= 0) return;
+      videoIndex -= 1;
+      renderVideo(shuffledVideos[videoIndex], { autoplay: true });
+    }
+
+    creators.forEach((creator) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.username = creator.username;
+      button.textContent = `แอดมิน${creator.admin}`;
+      button.setAttribute("aria-pressed", "false");
+      button.title = creator.videos.length ? "" : "ยังไม่มีลิงก์คลิปที่ยืนยันได้";
+      button.addEventListener("click", () => {
+        const filtered = allVideos.filter((video) => video.creator.username === creator.username);
+        controls.querySelectorAll("button[data-username]").forEach((accountButton) => {
+          accountButton.setAttribute("aria-pressed", String(accountButton === button));
+        });
+        randomButton.setAttribute("aria-pressed", "false");
+        if (!filtered.length) {
+          activeCreator = creator;
+          activeVideoPool = [];
+          shuffledVideos = [];
+          videoIndex = -1;
+          selectedName.replaceChildren(`แอดมิน${creator.admin} (@${creator.username})`);
+          const profileLink = document.createElement("a");
+          profileLink.href = `https://www.tiktok.com/@${creator.username}`;
+          profileLink.target = "_blank";
+          profileLink.rel = "noopener noreferrer";
+          profileLink.textContent = `เปิดช่องแอดมิน${creator.admin} ใน TikTok`;
+          selectedLink.replaceChildren(profileLink);
+          videoControls.querySelectorAll("button").forEach((playbackButton) => {
+            playbackButton.disabled = true;
+          });
+          playerStatus.textContent = "ยังไม่พบลิงก์คลิปสาธารณะของช่องนี้สำหรับฝังในหน้าเว็บ";
+          const fallback = document.createElement("p");
+          fallback.className = "fallback";
+          fallback.textContent = "ยังไม่มีคลิปที่ยืนยันลิงก์ได้สำหรับแสดงในหน้านี้";
+          playerShell.replaceChildren(fallback);
+          return;
+        }
+        videoControls.querySelectorAll("button").forEach((playbackButton) => {
+          playbackButton.disabled = false;
+        });
+        activeVideoPool = filtered;
+        shuffledVideos = shuffle(filtered);
+        videoIndex = -1;
+        drawNext();
+      });
+      controls.append(button);
+    });
+
+    const randomButton = document.createElement("button");
+    randomButton.type = "button";
+    randomButton.className = "random";
+    randomButton.textContent = "สุ่มคลิปจากทุกช่อง";
+    randomButton.setAttribute("aria-pressed", "true");
+    randomButton.addEventListener("click", () => {
+      controls.querySelectorAll("button[data-username]").forEach((button) => {
+        button.setAttribute("aria-pressed", "false");
+      });
+      randomButton.setAttribute("aria-pressed", "true");
+      videoControls.querySelectorAll("button").forEach((playbackButton) => {
+        playbackButton.disabled = false;
+      });
+      activeVideoPool = allVideos;
+      shuffledVideos = shuffle(allVideos);
+      videoIndex = -1;
+      drawNext();
+    });
+    controls.append(randomButton);
+
+    const previousButton = document.createElement("button");
+    previousButton.type = "button";
+    previousButton.textContent = "คลิปก่อนหน้า";
+    previousButton.addEventListener("click", drawPrevious);
+    const nextButton = document.createElement("button");
+    nextButton.type = "button";
+    nextButton.className = "random";
+    nextButton.textContent = "สุ่มคลิป + เล่นเสียง";
+    nextButton.addEventListener("click", () => drawNext({ autoplay: true }));
+    const retryButton = document.createElement("button");
+    retryButton.type = "button";
+    retryButton.textContent = "โหลดคลิปอีกครั้ง";
+    retryButton.addEventListener("click", () => {
+      const video = shuffledVideos[videoIndex];
+      if (video) renderVideo(video, { autoplay: true });
+    });
+    videoControls.append(previousButton, nextButton, soundButton, retryButton);
+
+    controls.insertBefore(randomButton, controls.firstChild);
+    shuffledVideos = shuffle(allVideos);
+    videoIndex = 0;
+    renderVideo(shuffledVideos[videoIndex], { autoplay: false });
+
+  </script>
+</body>
+</html>

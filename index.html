@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#171717">
   <meta name="description" content="ธนากรฟิชชิ่ง รวมหน้าไม้ยิงปลา อะไหล่ และอุปกรณ์เสริม พร้อมสอบถามรายละเอียดสินค้า">
   <meta name="keywords" content="ธนากรฟิชชิ่ง, ธนกรฟิชชิ่ง, หน้าไม้ยิงปลา, หน้าไม้, อุปกรณ์ตกปลา">
@@ -33,8 +33,9 @@
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { margin: 0; color: var(--ink); background: var(--paper); }
+    html { overflow-x: hidden; overflow-x: clip; scroll-behavior: smooth; }
+    body { min-width: 280px; margin: 0; overflow-x: hidden; overflow-x: clip; color: var(--ink); background: var(--paper); }
+    img, video, svg { max-width: 100%; }
     a { color: inherit; text-decoration: none; }
     button { font: inherit; }
     .container { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
@@ -424,6 +425,16 @@
       .contact-banner h2 { font-size: 25px; }
       .footer-row { flex-direction: column; gap: 7px; }
     }
+    @media (max-width: 380px) {
+      .container { width: calc(100% - 24px); }
+      .nav-links { gap: 14px; font-size: 13px; }
+      .categories { grid-template-columns: minmax(0, 1fr); }
+      .category { min-height: 0; }
+      .products { grid-auto-columns: min(90%, 300px); }
+      .product-actions { gap: 8px; }
+      .product-actions .button { padding-inline: 13px; font-size: 12px; }
+      .contact-banner { padding: 24px 18px; }
+    }
   </style>
 </head>
 <body>
@@ -575,10 +586,10 @@
           <p class="section-intro">เลือกชมหน้าไม้ อะไหล่ และอุปกรณ์เสริมตามหมวดได้ที่หน้าสินค้าทั้งหมด</p>
         </div>
         <div class="categories">
-          <a class="category" href="15.html#spearguns"><span class="category-icon" aria-hidden="true">🏹</span><h3>หน้าไม้ยิงปลา</h3><p>ชมรูปสินค้าและสอบถามแต่ละรุ่น</p></a>
-          <a class="category" href="15.html#shafts"><span class="category-icon" aria-hidden="true">➶</span><h3>ลูกดอกและอะไหล่</h3><p>สอบถามขนาดและอะไหล่ให้ตรงรุ่น</p></a>
-          <a class="category" href="15.html#rat-spearguns"><span class="category-icon" aria-hidden="true">🎯</span><h3>หน้าไม้ยิงหนู</h3><p>ชมสินค้าและสอบถามรายละเอียดกับทางร้าน</p></a>
-          <a class="category" href="15.html#accessories"><span class="category-icon" aria-hidden="true">🎒</span><h3>อุปกรณ์เสริม</h3><p>เลือกดูของใช้และอุปกรณ์เพิ่มเติม</p></a>
+          <a class="category" href="15.html?category=spearguns"><span class="category-icon" aria-hidden="true">🏹</span><h3>หน้าไม้ยิงปลา</h3><p>ชมรูปสินค้าและสอบถามแต่ละรุ่น</p></a>
+          <a class="category" href="15.html?category=shafts"><span class="category-icon" aria-hidden="true">➶</span><h3>ลูกดอกและอะไหล่</h3><p>สอบถามขนาดและอะไหล่ให้ตรงรุ่น</p></a>
+          <a class="category" href="15.html?category=rat-spearguns"><span class="category-icon" aria-hidden="true">🎯</span><h3>หน้าไม้ยิงหนู</h3><p>ชมสินค้าและสอบถามรายละเอียดกับทางร้าน</p></a>
+          <a class="category" href="15.html?category=accessories"><span class="category-icon" aria-hidden="true">🎒</span><h3>อุปกรณ์เสริม</h3><p>เลือกดูของใช้และอุปกรณ์เพิ่มเติม</p></a>
         </div>
       </div>
     </section>
@@ -734,13 +745,13 @@
 
     shuffledProducts.forEach((product) => featuredProducts.append(createProductCard(product)));
 
-    let carouselDirection = 1;
     let carouselFrame = 0;
     let carouselLastTime = 0;
     let resumeTimer = 0;
-    let endPauseUntil = 0;
     let carouselPaused = false;
     let carouselPosition = featuredProducts.scrollLeft;
+    let cardsPassedThisRound = 0;
+    const productsPerRound = featuredProducts.children.length;
     let carouselPointerInside = false;
     let carouselTouchActive = false;
     let carouselFocusWithin = false;
@@ -773,20 +784,27 @@
       const elapsed = Math.min((time - carouselLastTime) / 1000, 0.05);
       carouselLastTime = time;
 
-      const maxScroll = featuredProducts.scrollWidth - featuredProducts.clientWidth;
-      if (maxScroll > 1 && time >= endPauseUntil) {
-        carouselPosition += carouselDirection * 36 * elapsed;
-        if (carouselPosition >= maxScroll) {
-          carouselPosition = maxScroll;
-          featuredProducts.scrollLeft = maxScroll;
-          carouselDirection = -1;
-          endPauseUntil = time + 900;
-        } else if (carouselPosition <= 0) {
-          carouselPosition = 0;
-          featuredProducts.scrollLeft = 0;
-          carouselDirection = 1;
-          endPauseUntil = time + 900;
-        } else {
+      if (productsPerRound > 1) {
+        const firstCard = featuredProducts.firstElementChild;
+        const gap = Number.parseFloat(getComputedStyle(featuredProducts).columnGap) || 0;
+        const cardStep = firstCard.getBoundingClientRect().width + gap;
+        if (cardStep > 0) {
+          carouselPosition += 36 * elapsed;
+          while (carouselPosition >= cardStep) {
+            carouselPosition -= cardStep;
+            featuredProducts.append(featuredProducts.firstElementChild);
+            cardsPassedThisRound += 1;
+
+            if (cardsPassedThisRound >= productsPerRound) {
+              cardsPassedThisRound = 0;
+              const nextRound = [...featuredProducts.children];
+              for (let index = nextRound.length - 1; index > 0; index -= 1) {
+                const randomIndex = Math.floor(Math.random() * (index + 1));
+                [nextRound[index], nextRound[randomIndex]] = [nextRound[randomIndex], nextRound[index]];
+              }
+              featuredProducts.append(...nextRound);
+            }
+          }
           featuredProducts.scrollLeft = Math.round(carouselPosition);
         }
       }

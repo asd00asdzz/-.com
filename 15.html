@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#171717">
   <meta name="description" content="รวมหน้าไม้ยิงปลา อะไหล่ ลูกดอก และอุปกรณ์เสริมจากธนากรฟิชชิ่ง">
   <meta name="keywords" content="ธนากรฟิชชิ่ง, ธนกรฟิชชิ่ง, หน้าไม้ยิงปลา, หน้าไม้, อุปกรณ์ตกปลา">
@@ -29,8 +29,9 @@
       font-family: "Leelawadee UI", "Noto Sans Thai", Tahoma, sans-serif;
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 24px; overflow-x: clip; }
-    body { margin: 0; color: var(--ink); background: var(--paper); }
+    html { overflow-x: hidden; overflow-x: clip; scroll-behavior: smooth; scroll-padding-top: 24px; }
+    body { min-width: 280px; margin: 0; overflow-x: hidden; overflow-x: clip; color: var(--ink); background: var(--paper); }
+    img, video, svg { max-width: 100%; }
     a { color: inherit; text-decoration: none; }
     .container { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
     .topbar { padding: 9px 16px; background: #171717; color: #eee; text-align: center; font-size: 13px; }
@@ -108,7 +109,13 @@
     .poster-caption { color: #ddd; font-size: 12px; text-align: center; }
     .catalog-nav { display: flex; gap: 10px; overflow-x: auto; padding: 23px 0; scrollbar-width: thin; }
     .catalog-nav a { flex: 0 0 auto; padding: 10px 16px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; font-weight: 700; white-space: nowrap; }
-    .catalog-nav a:hover, .catalog-nav .all-products { border-color: var(--red); background: var(--red); color: #fff; }
+    .catalog-nav a:hover, .catalog-nav a[aria-current="page"] { border-color: var(--red); background: var(--red); color: #fff; }
+    .product-search { display: flex; gap: 10px; margin: 0 0 20px; }
+    .product-search input { min-width: 0; min-height: 46px; flex: 1; padding: 0 15px; border: 1px solid var(--line); border-radius: 12px; font: inherit; }
+    .product-search input:focus { outline: 2px solid rgba(213,31,53,.28); border-color: var(--red); }
+    .product-search button { min-height: 46px; padding: 0 20px; border: 0; border-radius: 12px; background: var(--red); color: #fff; font: inherit; font-weight: 800; cursor: pointer; }
+    .product-search button:hover { background: #b9162a; }
+    .search-status { min-height: 1.5em; margin: -10px 0 20px; color: var(--muted); font-size: 14px; }
     .catalog-section { padding: 36px 0 52px; border-top: 1px solid var(--line); }
     #all-products { position: relative; isolation: isolate; overflow: hidden; background: radial-gradient(ellipse at 8% 12%, rgba(213,31,53,.08), transparent 27%), radial-gradient(ellipse at 92% 40%, rgba(25,25,25,.08), transparent 31%), linear-gradient(180deg, #fff 0%, #f7f5f4 48%, #fff 100%); }
     .catalog-water-fish { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
@@ -183,6 +190,7 @@
       .brand-name small { font-size: 9px; }
       .nav-links { grid-column: 1 / -1; grid-row: 2; gap: 20px; overflow-x: auto; padding: 4px 0 7px; white-space: nowrap; }
       .button { min-height: 42px; padding: 0 12px; font-size: 12px; white-space: nowrap; }
+      .product-search button { padding-inline: 15px; }
       .catalog-hero { padding: 38px 0 30px; }
       .hero-content { min-height: 400px; grid-template-columns: 1fr; gap: 18px; }
       .hero-content > div:first-child { padding: 16px 12px; background: linear-gradient(90deg, rgba(17,17,17,.88), rgba(17,17,17,.62)); }
@@ -211,6 +219,19 @@
       .tag { top: 8px; left: 8px; padding: 5px 8px; font-size: 10px; }
       .contact { padding: 25px 20px; }
       .footer-row { flex-direction: column; gap: 8px; }
+    }
+    @media (max-width: 380px) {
+      .container { width: calc(100% - 24px); }
+      .nav-links { gap: 14px; font-size: 13px; }
+      .catalog-nav { gap: 7px; }
+      .catalog-nav a { padding: 9px 12px; }
+      .product-search { gap: 7px; }
+      .product-search input { padding-inline: 11px; }
+      .product-search button { padding-inline: 12px; }
+      .items { grid-template-columns: minmax(0, 1fr); }
+      .item-image-link { height: clamp(180px, 62vw, 240px); }
+      .item-info { padding: 15px; }
+      .contact { padding: 22px 16px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
@@ -300,12 +321,17 @@
     </section>
     <div class="container">
       <nav class="catalog-nav" aria-label="หมวดสินค้า">
-        <a class="all-products" href="#all-products">สินค้าทั้งหมด</a>
-        <a href="#spearguns">หน้าไม้ยิงปลา</a>
-        <a href="#shafts">ลูกดอกและอะไหล่</a>
-        <a href="#rat-spearguns">หน้าไม้ยิงหนู</a>
-        <a href="#accessories">อุปกรณ์เสริม</a>
+        <a class="all-products" href="15.html#all-products">สินค้าทั้งหมด</a>
+        <a data-category-link="spearguns" href="15.html?category=spearguns">หน้าไม้ยิงปลา</a>
+        <a data-category-link="shafts" href="15.html?category=shafts">ลูกดอกและอะไหล่</a>
+        <a data-category-link="rat-spearguns" href="15.html?category=rat-spearguns">หน้าไม้ยิงหนู</a>
+        <a data-category-link="accessories" href="15.html?category=accessories">อุปกรณ์เสริม</a>
       </nav>
+      <form class="product-search" id="product-search" role="search">
+        <input id="product-search-input" type="search" placeholder="ค้นหาชื่อสินค้า รายละเอียด หรือหมวดหมู่" aria-label="ค้นหาสินค้า">
+        <button type="submit">ค้นหา</button>
+      </form>
+      <p class="search-status" id="search-status" role="status" aria-live="polite"></p>
     </div>
       <div id="all-products">
         <div class="catalog-water-fish" aria-hidden="true">
@@ -356,11 +382,7 @@
         </section>
         </div>
       </div>
-    <div class="container">
-      <div class="notice">
-        <p>ต้องการเพิ่มสินค้า: เพิ่มรายการใน <code>catalog-products.js</code> พร้อมหมวด รูป ชื่อ และรายละเอียด ระบบจะแสดงสินค้าให้อัตโนมัติทั้งสองหน้า ใช้ลิงก์แชร์ Google Drive ได้ โดยตั้งสิทธิ์ไฟล์เป็น “ทุกคนที่มีลิงก์”</p>
-        <p>โปรดตรวจสอบราคาและสต็อกกับร้าน ปฏิบัติตามกฎหมายและข้อกำหนดของพื้นที่ และคำนึงถึงความปลอดภัยทางน้ำทุกครั้ง</p>
-      </div>
+  
       <section class="contact" id="contact">
         <h2>สนใจสินค้าในรูป?</h2>
         <p>กดปุ่มด้านล่างเพื่อสอบถามสินค้า รุ่น ขนาด และสต็อกกับทางร้าน</p>
@@ -378,13 +400,50 @@
       throw new Error("โหลดข้อมูลสินค้า catalog-products.js ไม่สำเร็จ");
     }
 
+    const categoryPages = {
+      spearguns: { title: "หน้าไม้ยิงปลา", description: "เลือกชมหน้าไม้ยิงปลาและสอบถามรายละเอียดกับทางร้าน" },
+      shafts: { title: "ลูกดอกและอะไหล่", description: "เลือกชมลูกดอกและอะไหล่หน้าไม้ พร้อมสอบถามขนาดกับทางร้าน" },
+      "rat-spearguns": { title: "หน้าไม้ยิงหนู", description: "เลือกชมหน้าไม้ยิงหนูและอุปกรณ์ที่เกี่ยวข้อง" },
+      accessories: { title: "อุปกรณ์เสริม", description: "เลือกชมอุปกรณ์เสริมและสอบถามรายละเอียดกับทางร้าน" }
+    };
+    const requestedCategory = new URLSearchParams(window.location.search).get("category");
+    const selectedCategory = Object.hasOwn(categoryPages, requestedCategory) ? requestedCategory : null;
+
+    document.querySelectorAll("[data-category-link]").forEach((link) => {
+      if (link.dataset.categoryLink === selectedCategory) {
+        link.setAttribute("aria-current", "page");
+      }
+    });
+
+    if (selectedCategory) {
+      const page = categoryPages[selectedCategory];
+      document.title = `${page.title} | ธนากรฟิชชิ่ง`;
+      document.querySelector(".hero-content h1").textContent = page.title;
+      document.querySelector(".hero-copy").textContent = page.description;
+    }
+
     document.querySelectorAll("[data-product-category]").forEach((list) => {
       const category = list.dataset.productCategory;
-      window.catalogProducts
+      const products = window.catalogProducts
         .filter((product) => product.category === category)
-        .forEach((product) => {
+        .reverse();
+      products.forEach((product) => {
           const article = document.createElement("article");
           article.className = "item";
+          const categoryNames = {
+            spearguns: "หน้าไม้ยิงปลา",
+            shafts: "ลูกดอก อะไหล่",
+            "rat-spearguns": "หน้าไม้ยิงหนู",
+            accessories: "อุปกรณ์เสริม"
+          };
+          article.dataset.searchText = [
+            product.title,
+            product.description,
+            product.alt,
+            product.tag,
+            product.price,
+            categoryNames[product.category]
+          ].filter(Boolean).join(" ").toLocaleLowerCase("th");
 
           const imageLink = document.createElement("a");
           imageLink.className = "item-image-link";
@@ -437,7 +496,50 @@
           });
           list.append(article);
         });
+
+      const emptyMessage = list.parentElement.querySelector(".empty-category");
+      if (emptyMessage) emptyMessage.hidden = products.length > 0;
     });
+
+    const searchForm = document.querySelector("#product-search");
+    const searchInput = document.querySelector("#product-search-input");
+    const searchStatus = document.querySelector("#search-status");
+    const productSections = [...document.querySelectorAll(".catalog-section")];
+    const productCards = [...document.querySelectorAll(".item")];
+
+    function updateProductSearch() {
+      const query = searchInput.value.trim().toLocaleLowerCase("th");
+      const terms = query.split(/\s+/).filter(Boolean);
+      let visibleCount = 0;
+
+      productCards.forEach((card) => {
+        const matches = terms.every((term) => card.dataset.searchText.includes(term));
+        card.hidden = !matches;
+        if (matches) visibleCount += 1;
+      });
+
+      productSections.forEach((section) => {
+        const hasVisibleProduct = [...section.querySelectorAll(".item")].some((card) => !card.hidden);
+        const categoryMatches = !selectedCategory || section.id === selectedCategory;
+        section.hidden = !categoryMatches || (terms.length > 0 && !hasVisibleProduct);
+      });
+
+      if (!terms.length) {
+        searchStatus.textContent = "";
+      } else if (visibleCount) {
+        searchStatus.textContent = `พบสินค้า ${visibleCount} รายการ`;
+      } else {
+        searchStatus.textContent = "ไม่พบสินค้าที่ตรงกับคำค้น ลองค้นด้วยคำอื่น";
+      }
+    }
+
+    searchForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      updateProductSearch();
+      document.querySelector("#all-products").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    searchInput.addEventListener("input", updateProductSearch);
+    updateProductSearch();
 
     // ใส่ลิงก์แชร์ Google Drive ใน src ได้ โดยตั้งสิทธิ์เป็น "ทุกคนที่มีลิงก์"
     const catalogGalleryMedia = [

@@ -48,8 +48,13 @@
     .selected-link a { color: var(--red); font-weight: 800; text-decoration: underline; }
     .selected-link button { min-height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: inherit; font-weight: 700; cursor: pointer; }
     .player-status { min-height: 20px; margin: 0 0 8px; color: var(--muted); font-size: 12px; }
-    .player-shell { min-height: 240px; display: flex; justify-content: center; padding: 12px; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: #111; }
-    .player-shell iframe { display: block; width: min(100%, 405px); height: min(720px, calc((100vw - 64px) * 16 / 9)); min-height: 420px; border: 0; border-radius: 10px; background: #000; }
+    .feed-layout { position: relative; display: flex; justify-content: center; align-items: center; gap: 12px; }
+    .feed-arrow { width: 48px; height: 54px; flex: 0 0 auto; border: 1px solid #333; border-radius: 14px; color: #fff; background: #222; font-size: 25px; cursor: pointer; }
+    .feed-arrow:hover { background: var(--red); }
+    .feed-arrow:disabled { opacity: .4; cursor: not-allowed; }
+    .player-shell { position: relative; width: min(100%, 429px); min-height: 240px; display: flex; justify-content: center; padding: 12px; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: #111; }
+    .player-shell iframe { display: block; width: 100%; height: min(720px, calc((100vw - 64px) * 16 / 9)); min-height: 420px; border: 0; border-radius: 10px; background: #000; }
+    .swipe-zone { display: none; }
     .notice { margin: 14px 0 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
     .fallback { margin: 12px 0; color: var(--muted); text-align: center; font-size: 13px; line-height: 1.7; }
     .fallback a { color: var(--red); font-weight: 800; text-decoration: underline; }
@@ -61,6 +66,14 @@
       .nav-links { width: 100%; justify-content: space-between; gap: 10px; overflow-x: auto; padding: 2px 0; font-size: 13px; }
       main { padding-top: 18px; }
       .player-shell { padding: 6px; }
+      .feed-layout { gap: 0; }
+      .feed-arrow { position: absolute; z-index: 2; right: 12px; width: 42px; height: 48px; border-radius: 50%; opacity: .88; }
+      .feed-arrow.previous { top: 28%; }
+      .feed-arrow.next { top: calc(28% + 58px); }
+      .swipe-zone { position: absolute; z-index: 1; top: 6px; bottom: 6px; display: block; width: 26px; touch-action: none; }
+      .swipe-zone.left { left: 6px; }
+      .swipe-zone.right { right: 6px; }
+      .swipe-zone::after { position: absolute; top: 50%; left: 50%; padding: 5px 2px; transform: translate(-50%, -50%); border-radius: 999px; color: #fff; background: rgb(0 0 0 / 45%); content: "↕"; font-size: 15px; }
       .controls { gap: 7px; }
       .controls button { padding: 0 11px; font-size: 12px; }
     }
@@ -90,16 +103,22 @@
     <section class="intro">
       <span class="kicker">TIKTOK จากแอดมินร้าน</span>
       <h1>เลือกชมคลิปสินค้า</h1>
-      <p>ดูคลิปจากหลายช่องแบบสุ่ม กด “สุ่มคลิป + เล่นเสียง” เพื่อเปลี่ยนไปคลิปถัดไป</p>
+      <p>ดูคลิปต่อเนื่องแบบฟีด: บนมือถือปัดขึ้นหรือลงที่ขอบคลิป บนคอมพิวเตอร์กดปุ่มลูกศรข้างคลิปหรือปุ่มลูกศรขึ้น/ลงบนคีย์บอร์ด</p>
     </section>
     <div class="controls" id="creator-controls" aria-label="กรองคลิปตามช่อง"></div>
     <p class="selected-name" id="selected-name" aria-live="polite"></p>
     <div class="controls" id="video-controls" aria-label="เลือกคลิป"></div>
     <p class="selected-link" id="selected-link"></p>
     <p class="player-status" id="player-status" aria-live="polite"></p>
-    <section class="player-shell" id="player-shell" aria-label="คลิป TikTok จากบัญชีที่เลือก">
-      <p class="fallback">เลือกบัญชีเพื่อดูคลิปจากช่องแอดมิน</p>
-    </section>
+    <div class="feed-layout" aria-label="ฟีดคลิป">
+      <button class="feed-arrow previous" id="feed-previous" type="button" aria-label="คลิปก่อนหน้า" title="คลิปก่อนหน้า">↑</button>
+      <section class="player-shell" id="player-shell" aria-label="คลิป TikTok จากบัญชีที่เลือก">
+        <p class="fallback">เลือกบัญชีเพื่อดูคลิปจากช่องแอดมิน</p>
+      </section>
+      <span class="swipe-zone left" aria-hidden="true"></span>
+      <span class="swipe-zone right" aria-hidden="true"></span>
+      <button class="feed-arrow next" id="feed-next" type="button" aria-label="คลิปถัดไป" title="คลิปถัดไป">↓</button>
+    </div>
     <p class="notice">ปุ่ม “เล่นพร้อมเสียง” จะสั่งเปิดเสียงและเล่น หากเบราว์เซอร์ไม่อนุญาต ให้แตะปุ่มเสียงในตัวเล่นเอง รายการนี้รวมคลิปสาธารณะที่ค้นพบและยืนยัน URL ได้ ไม่ใช่คลิปทั้งหมดในบัญชี</p>
   </main>
   <footer><div class="container">© 2026 ธนากรฟิชชิ่ง · คลิปและสิทธิ์ในวิดีโอเป็นของผู้สร้างบน TikTok</div></footer>
@@ -122,6 +141,8 @@
     const selectedLink = document.querySelector("#selected-link");
     const playerStatus = document.querySelector("#player-status");
     const playerShell = document.querySelector("#player-shell");
+    const feedPrevious = document.querySelector("#feed-previous");
+    const feedNext = document.querySelector("#feed-next");
     const allVideos = creators.flatMap((creator) => creator.videos.map((id) => ({ id, creator })));
     const soundButton = document.createElement("button");
     soundButton.type = "button";
@@ -146,6 +167,8 @@
       if (!video) return;
       activeCreator = video.creator;
       activeVideoId = video.id;
+      feedPrevious.disabled = videoIndex <= 0;
+      feedNext.disabled = activeVideoPool.length === 0;
       if (autoplay) soundRequested = true;
       const count = activeVideoPool.length;
       selectedName.replaceChildren(
@@ -239,6 +262,33 @@
       renderVideo(shuffledVideos[videoIndex], { autoplay: true });
     }
 
+    feedPrevious.addEventListener("click", drawPrevious);
+    feedNext.addEventListener("click", () => drawNext({ autoplay: true }));
+
+    document.querySelectorAll(".swipe-zone").forEach((zone) => {
+      let touchStartY = 0;
+      zone.addEventListener("pointerdown", (event) => {
+        if (event.pointerType !== "touch") return;
+        touchStartY = event.clientY;
+        zone.setPointerCapture(event.pointerId);
+      });
+      zone.addEventListener("pointerup", (event) => {
+        if (event.pointerType !== "touch") return;
+        const distance = event.clientY - touchStartY;
+        if (Math.abs(distance) < 45) return;
+        if (distance < 0) drawNext({ autoplay: true });
+        else drawPrevious();
+      });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
+      if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(event.target.tagName)) return;
+      event.preventDefault();
+      if (event.key === "ArrowUp") drawPrevious();
+      else drawNext({ autoplay: true });
+    });
+
     creators.forEach((creator) => {
       const button = document.createElement("button");
       button.type = "button";
@@ -267,6 +317,8 @@
           videoControls.querySelectorAll("button").forEach((playbackButton) => {
             playbackButton.disabled = true;
           });
+          feedPrevious.disabled = true;
+          feedNext.disabled = true;
           playerStatus.textContent = "ยังไม่พบลิงก์คลิปสาธารณะของช่องนี้สำหรับฝังในหน้าเว็บ";
           const fallback = document.createElement("p");
           fallback.className = "fallback";

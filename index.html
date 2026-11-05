@@ -84,6 +84,30 @@
       transition: transform .2s, background .2s;
     }
     .nav-cta:hover, .button:hover { transform: translateY(-2px); background: #b9162a; }
+    .admin-contact-dialog {
+      width: min(760px, calc(100% - 28px));
+      max-width: none;
+      max-height: min(88vh, 760px);
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      border-radius: 22px;
+      color: var(--ink);
+      background: var(--paper);
+      box-shadow: 0 24px 80px rgba(0,0,0,.35);
+    }
+    .admin-contact-dialog::backdrop { background: rgba(0,0,0,.68); backdrop-filter: blur(4px); }
+    .admin-contact-content { max-height: min(88vh, 760px); padding: 22px; overflow-y: auto; }
+    .admin-contact-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    .admin-contact-heading h2 { margin: 0 0 5px; font-size: 23px; }
+    .admin-contact-heading p { margin: 0; color: var(--muted); font-size: 13px; }
+    .admin-contact-close { display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; border: 0; border-radius: 50%; color: #fff; background: var(--lime); font-size: 25px; line-height: 1; cursor: pointer; }
+    .admin-contact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .admin-contact-card { min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
+    .admin-contact-card h3 { margin: 0 0 10px; font-size: 17px; }
+    .admin-contact-card p { margin: 7px 0 0; color: #555; font-size: 13px; line-height: 1.55; overflow-wrap: anywhere; }
+    .admin-contact-card a { color: #b9162a; font-weight: 700; }
+    .admin-contact-card a:hover { text-decoration: underline; }
 
     .hero {
       position: relative;
@@ -428,6 +452,10 @@
       .contact-banner h2 { font-size: 23px; line-height: 1.35; }
       .contact-details { gap: 10px 16px; margin-top: 16px; font-size: 12px; }
       .footer-row { flex-direction: column; gap: 7px; }
+      .admin-contact-content { padding: 17px; }
+      .admin-contact-heading h2 { font-size: 20px; }
+      .admin-contact-grid { grid-template-columns: minmax(0, 1fr); gap: 9px; }
+      .admin-contact-card { padding: 13px; }
     }
     @media (max-width: 380px) {
       .container { width: calc(100% - 24px); }
@@ -459,7 +487,7 @@
         <a href="#products">สินค้าแนะนำ</a>
         <a href="#about">เกี่ยวกับร้าน</a>
       </nav>
-      <a class="nav-cta" href="#contact">ติดต่อร้าน <span aria-hidden="true">↗</span></a>
+      <button class="nav-cta" type="button" data-open-admin-contacts>ติดต่อร้าน <span aria-hidden="true">↗</span></button>
     </div>
   </header>
 
@@ -670,12 +698,70 @@
     </section>
   </main>
 
+  <dialog class="admin-contact-dialog" id="admin-contact-dialog" aria-labelledby="admin-contact-title">
+    <div class="admin-contact-content">
+      <div class="admin-contact-heading">
+        <div><h2 id="admin-contact-title">ช่องทางการสั่งซื้อ</h2><p>เลือกติดต่อแอดมินที่สะดวกได้เลย</p></div>
+        <button class="admin-contact-close" type="button" aria-label="ปิดหน้าต่าง" data-close-admin-contacts>×</button>
+      </div>
+      <div class="admin-contact-grid">
+        <section class="admin-contact-card">
+          <h3>แอดมินโม</h3>
+          <p>LINE ID: <a href="https://line.me/R/ti/p/%40652mnstp" target="_blank" rel="noopener noreferrer">@652mnstp</a></p>
+          <p>โทร: <a href="tel:637144801">637144801</a></p>
+          <p>TikTok: <a href="https://www.tiktok.com/@tk.fishing2" target="_blank" rel="noopener noreferrer">tk.fishing2</a>, <a href="https://www.tiktok.com/@gooddey10" target="_blank" rel="noopener noreferrer">gooddey10</a></p>
+          <p>Facebook: โมจิ ฟิชชิ่ง</p>
+        </section>
+        <section class="admin-contact-card">
+          <h3>แอดมินเหมย</h3>
+          <p>LINE ID: <a href="https://line.me/R/ti/p/%40628uuyjh" target="_blank" rel="noopener noreferrer">@628uuyjh</a></p>
+          <p>โทร: <a href="tel:0937263051">093-7263051</a></p>
+          <p>TikTok: <a href="https://www.tiktok.com/@g.bigfish" target="_blank" rel="noopener noreferrer">@g.bigfish</a>, <a href="https://www.tiktok.com/@jguugih" target="_blank" rel="noopener noreferrer">@jguugih</a></p>
+          <p>Facebook: เหมย เหมย ฟิชชิ่ง</p>
+        </section>
+        <section class="admin-contact-card">
+          <h3>แอดมินเอ๊ะ</h3>
+          <p>LINE ID: <a href="https://line.me/R/ti/p/%40584connj" target="_blank" rel="noopener noreferrer">@584connj</a></p>
+          <p>โทร: <a href="tel:0629056915">062 905 6915</a></p>
+          <p>TikTok: <a href="https://www.tiktok.com/@chiwfitchv2" target="_blank" rel="noopener noreferrer">chiwfitchv2</a>, <a href="https://www.tiktok.com/@hanakam05" target="_blank" rel="noopener noreferrer">hanakam05</a>, <a href="https://www.tiktok.com/@tk36465" target="_blank" rel="noopener noreferrer">tk36465</a></p>
+          <p>Facebook: RA Fishing</p>
+        </section>
+        <section class="admin-contact-card">
+          <h3>แอดมินไข่มุก</h3>
+          <p>LINE ID: <a href="https://line.me/R/ti/p/%40516fqwup" target="_blank" rel="noopener noreferrer">@516fqwup</a></p>
+          <p>โทร: <a href="tel:0942710056">094-2710056</a></p>
+          <p>TikTok: <a href="https://www.tiktok.com/@naritsxsi29" target="_blank" rel="noopener noreferrer">@naritsxsi29</a>, <a href="https://www.tiktok.com/@parkerkindly" target="_blank" rel="noopener noreferrer">@parkerkindly</a></p>
+          <p>Facebook: KM Fishing</p>
+        </section>
+        <section class="admin-contact-card">
+          <h3>แอดมินเจน</h3>
+          <p>LINE ID: <a href="https://line.me/R/ti/p/%40326oquym" target="_blank" rel="noopener noreferrer">@326oquym</a></p>
+          <p>โทร: <a href="tel:0961793227">0961793227</a></p>
+        </section>
+        <section class="admin-contact-card">
+          <h3>แอดมินนะเน็ค</h3>
+          <p>LINE ID: <a href="https://line.me/R/ti/p/%40467sydtx" target="_blank" rel="noopener noreferrer">@467sydtx</a></p>
+          <p>โทร: <a href="tel:0831450691">0831450691</a></p>
+          <p>TikTok: นะเน็ค จอมแห้ว</p>
+          <p>Facebook: นะเน็ค จอมแห้ว</p>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
   <footer>
     <div class="container footer-row"><span>© <span id="year">2026</span> ธนากรฟิชชิ่ง · หน้าไม้ยิงปลาและอุปกรณ์</span><span>เลือกใช้อุปกรณ์อย่างรับผิดชอบและคำนึงถึงความปลอดภัย</span></div>
   </footer>
   <script src="catalog-products.js"></script>
   <script src="site-data.js"></script>
   <script>
+    const adminContactDialog = document.querySelector("#admin-contact-dialog");
+    document.querySelector("[data-open-admin-contacts]").addEventListener("click", () => adminContactDialog.showModal());
+    adminContactDialog.querySelector("[data-close-admin-contacts]").addEventListener("click", () => adminContactDialog.close());
+    adminContactDialog.addEventListener("click", (event) => {
+      if (event.target === adminContactDialog) adminContactDialog.close();
+    });
+
     (async () => {
     await window.loadSiteData();
     if (!Array.isArray(window.catalogProducts)) {
